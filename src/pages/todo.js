@@ -27,20 +27,19 @@ export default function Todo() {
         const decodedToken = jwtDecode(storedToken);
         setToken(storedToken);
         setUserId(decodedToken.userId);
+
+        setIsLoading(true);
+        const response = await axios.get(
+          `http://localhost:3000/todo/${decodedToken.userId}`,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          },
+        );
+        setTodos(response.data);
       } catch (error) {
         localStorage.removeItem('token');
         router.push('/login');
         return;
-      }
-
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`http://localhost:3000/todo/${userId}`, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
-        setTodos(response.data);
-      } catch (error) {
-        console.error('Error fetching todos:', error);
       } finally {
         setIsLoading(false);
       }
@@ -58,8 +57,16 @@ export default function Todo() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      const updatedTodos = todos.map((todo) => (todo.id === id ? response.data : todo));
-      setTodos(updatedTodos);
+
+      if (response.data && response.data.todo) {
+        const updatedTodoFromServer = response.data.todo;
+        const updatedTodos = todos.map((todo) => {
+          return todo.id === id ? updatedTodoFromServer : todo;
+        });
+        setTodos(updatedTodos);
+      } else {
+        console.error('Todo not updated on the server');
+      }
     } catch (error) {
       console.error('Error updating todo:', error);
     }
