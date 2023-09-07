@@ -12,7 +12,7 @@ export default function Register() {
       const response = await axios.post('http://localhost:3000/user/register');
       setUserId(response.data.userId);
       localStorage.setItem('token', response.data.token);
-      router.push('/todo');
+      // alert('Registration successful! your code is' + response.data.userId);
     } catch (error) {
       console.error('Registration failed:', error);
     }
@@ -26,15 +26,20 @@ export default function Register() {
           Generate Code
         </button>
         {userId && (
-          <div className='mt-4'>
+          <div className='mt-4 text-gray-800'>
             <h2>Your Code:</h2>
             <p className='text-lg font-bold'>{userId}</p>
           </div>
         )}
       </div>
-      <Link href='/'>
-        <button className='p-2 m-4 bg-blue-500 text-white rounded'>Home</button>
-      </Link>
+      <div>
+        <Link href='/'>
+          <button className='p-2 m-4 bg-blue-500 text-white rounded'>Home</button>
+        </Link>
+        <Link href='/login'>
+          <button className='p-2 m-4 bg-blue-500 text-white rounded'>Login</button>
+        </Link>
+      </div>
     </div>
   );
 }

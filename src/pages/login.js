@@ -14,19 +14,20 @@ export default function Login() {
       router.push('/todo');
     } catch (error) {
       console.error('Login failed:', error);
+      alert('Code not found, Login failed!');
     }
   };
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-700'>
       <div className='p-4 bg-white rounded shadow'>
-        <h1 className='text-2xl mb-4'>Login</h1>
+        <h1 className='text-2xl mb-4 text-gray-700'>Login</h1>
         <input
           type='text'
           placeholder='Enter 4-digit code'
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
-          className='p-2 mb-4 border rounded'
+          className='p-2 mb-4 border rounded text-gray-700'
         />
         <button onClick={handleLogin} className='p-2 bg-blue-500 text-white rounded'>
           Login
