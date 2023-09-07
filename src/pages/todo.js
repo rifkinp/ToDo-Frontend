@@ -1,57 +1,42 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 import Link from 'next/link';
-import { setAuthState, clearAuthState } from '../redux/authSlice';
-
-const initializeAuth = async (dispatch, router) => {
-  const storedToken = localStorage.getItem('token');
-
-  if (!storedToken) {
-    dispatch(clearAuthState());
-    router.push('/login');
-    return null;
-  }
-
-  try {
-    const decodedToken = jwtDecode(storedToken);
-    await dispatch(
-      setAuthState({
-        token: storedToken,
-        userId: decodedToken.userId,
-        decoded: decodedToken,
-      }),
-    );
-    return storedToken;
-  } catch (error) {
-    localStorage.removeItem('token');
-    dispatch(clearAuthState());
-    router.push('/login');
-    return null;
-  }
-};
 
 export default function Todo() {
   const [todos, setTodos] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [token, setToken] = useState(null);
+  const [userId, setUserId] = useState(null);
 
-  const dispatch = useDispatch();
   const router = useRouter();
-  const { token, userId } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const initialize = async () => {
-      const validToken = await initializeAuth(dispatch, router);
-      if (!validToken) return;
+      const storedToken = localStorage.getItem('token');
+
+      if (!storedToken) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(storedToken);
+        setToken(storedToken);
+        setUserId(decodedToken.userId);
+      } catch (error) {
+        localStorage.removeItem('token');
+        router.push('/login');
+        return;
+      }
 
       setIsLoading(true);
       try {
         const response = await axios.get(`http://localhost:3000/todo/${userId}`, {
-          headers: { Authorization: `Bearer ${validToken}` },
+          headers: { Authorization: `Bearer ${storedToken}` },
         });
         setTodos(response.data);
       } catch (error) {
@@ -62,7 +47,7 @@ export default function Todo() {
     };
 
     initialize();
-  }, [router, userId]);
+  }, []);
 
   const updateTodo = async (id, updatedTask) => {
     try {
@@ -119,7 +104,6 @@ export default function Todo() {
 
   const logOut = () => {
     localStorage.removeItem('token');
-    dispatch(clearAuthState());
     router.push('/login');
   };
 
