@@ -3,34 +3,34 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-export default function Login() {
+export default function Register() {
   const [userId, setUserId] = useState('');
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/user/login', { userId });
+      const response = await axios.post('http://localhost:3000/user/register');
+      setUserId(response.data.userId);
       localStorage.setItem('token', response.data.token);
       router.push('/todo');
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Registration failed:', error);
     }
   };
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-700'>
       <div className='p-4 bg-white rounded shadow'>
-        <h1 className='text-2xl mb-4'>Login</h1>
-        <input
-          type='text'
-          placeholder='Enter 4-digit code'
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          className='p-2 mb-4 border rounded'
-        />
-        <button onClick={handleLogin} className='p-2 bg-blue-500 text-white rounded'>
-          Login
+        <h1 className='text-2xl mb-4 text-gray-700'>Register</h1>
+        <button onClick={handleRegister} className='p-2 bg-blue-500 text-white rounded'>
+          Generate Code
         </button>
+        {userId && (
+          <div className='mt-4'>
+            <h2>Your Code:</h2>
+            <p className='text-lg font-bold'>{userId}</p>
+          </div>
+        )}
       </div>
       <Link href='/'>
         <button className='p-2 m-4 bg-blue-500 text-white rounded'>Home</button>

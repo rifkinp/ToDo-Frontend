@@ -1,10 +1,8 @@
-// src/pages/index.js
-
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className='flex flex-col items-center justify-center min-h-screen bg-gray-400'>
+    <main className='flex flex-col items-center justify-center min-h-screen bg-gray-700'>
       <h1 className='text-4xl mb-4'>TODO APPS Home Page</h1>
       <div className='flex space-x-4'>
         <Link href='/login'>
