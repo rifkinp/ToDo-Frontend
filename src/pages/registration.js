@@ -9,7 +9,7 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/user/register');
+      const response = await axios.post('https://to-do-backend-gamma.vercel.app/user/register');
       setUserId(response.data.userId);
       localStorage.setItem('token', response.data.token);
       // alert('Registration successful! your code is' + response.data.userId);

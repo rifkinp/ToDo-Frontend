@@ -30,7 +30,7 @@ export default function Todo() {
 
         setIsLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/todo/${decodedToken.userId}`,
+          `https://to-do-backend-gamma.vercel.app/todo/${decodedToken.userId}`,
           {
             headers: { Authorization: `Bearer ${storedToken}` },
           },
@@ -51,7 +51,7 @@ export default function Todo() {
   const updateTodo = async (id, updatedTask) => {
     try {
       const response = await axios.put(
-        'http://localhost:3000/todo/update/',
+        'https://to-do-backend-gamma.vercel.app/todo/update/',
         { id: id, task: updatedTask },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -74,7 +74,7 @@ export default function Todo() {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete('http://localhost:3000/todo/delete/', {
+      await axios.delete('https://to-do-backend-gamma.vercel.app/todo/delete/', {
         headers: { Authorization: `Bearer ${token}` },
         data: { id },
       });
@@ -94,7 +94,7 @@ export default function Todo() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/todo/create',
+        'https://to-do-backend-gamma.vercel.app/todo/create',
         { task: newTask, userId: userId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -159,7 +159,7 @@ export default function Todo() {
                   <button
                     onClick={() => deleteTodo(todo.id)}
                     className='p-1 bg-red-500 text-white rounded'
-                  >
+                  > 
                     Delete
                   </button>
                 </div>

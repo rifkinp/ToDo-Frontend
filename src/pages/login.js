@@ -9,7 +9,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/user/login', { userId });
+      const response = await axios.post('https://to-do-backend-gamma.vercel.app/user/login', { userId });
       localStorage.setItem('token', response.data.token);
       router.push('/todo');
     } catch (error) {
